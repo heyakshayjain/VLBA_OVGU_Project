@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container d-flex flex-column justify-content-center">
+    <h2 class="mt-7 maintenance-service-heading text-primary text-center"><strong>Maintenance and Service Department</strong></h2>
+
+    <div class="form-group mt-6">
+        <label for="client-dropdown" class = "text-primary">Select Client:</label>
+        <select id="client-dropdown" class="form-control custom-select">
+            <option value="C100001">C100001 - Useful Bikes Service</option>
+            <option value="C100002">C100002 - Useful Cars Rental</option>
+            <option value="C100003">C100003 - Useful Driving Dealer</option>
+            <option value="C100004">C100004 - Universal Mobiles Service</option>
+            <option value="C100005">C100005 - Ultimate Vehicles Dealer</option>
+            <option value="C100006">C100006	- Useful Bikes Rental</option>
+            <option value="C100007">C100007	- Useful Vehicles Seller</option>
+            <option value="C100008">C100008	- Ultimate Vehicles Station</option>
+            <option value="C100009">C100009	- Used Cars Service</option>
+            <option value="C100010">C100010	- Ultimate Mobiles Seller</option>
+            <option value="C100011">C100011	- Useful Cars Service</option>
+            <option value="C100012">C100012	- Ultimate Driving Dealer</option>
+            <option value="C100013">C100013	- Super Vehicles Station</option>
+            <option value="C100014">C100014	- Used Driving Seller</option>
+            <option value="C100015">C100015	- Universal Bikes Station</option>
+        </select>
+    </div>
+
+    <div class="form-group mt-7">
+        <label for="task-dropdown" class = "text-primary">Select Task:</label>
+        <select id="task-dropdown" class="form-control custom-select">
+            <option value="Bike repair">Bike repair</option>
+            <option value="Charging station check">Charging station check</option>
+            <option value="Charging station installation">Charging station installation</option>
+            <option value="Engine check">Engine check</option>
+            <option value="Vehicle maintenance">Vehicle maintenance</option>
+            <option value="Electronics repair">Electronics repair</option>
+        </select>
+    </div>
+
+    <div class="form-group mt-6">
+        <label for="quantity-dropdown" class = "text-primary">Select Quantity:</label>
+        <select id="quantity-dropdown" class="form-control custom-select">
+            {% for value in range(1, 21) %}
+                <option value="{{ value }}">{{ value }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group mt-6">
+        <label for="rows-dropdown" class = "text-primary">Best n Employees:</label>
+        <select id="rows-dropdown" class="form-control custom-select">
+            {% for value in range(1, 11) %}
+                <option value="{{ value }}">{{ value }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <div class="text-center mt-7">
+        <button id="dashboard-button" class="btn btn-outline-primary btn-lg rounded-pill shadow-sm btn-sm">
+            <span class="font-weight-bold">Assign Employees</span>
+        </button>
+    </div>
+</div>
+
+<script>
+    document.getElementById("dashboard-button").onclick = function() {
+        var selectedTask = document.getElementById("task-dropdown").value;
+        var selectedQuantity = document.getElementById("quantity-dropdown").value;
+        var selectedRows = document.getElementById("rows-dropdown").value;
+        var selectedClient = document.getElementById("client-dropdown").value;
+        window.location.href = "/dashboard?task=" + selectedTask + "&quantity=" + selectedQuantity + "&rows=" + selectedRows + "&client=" + selectedClient;
+    };
+</script>
+{% endblock %}

@@ -1,0 +1,13 @@
+select 
+AE.ServiceEmployeeId, 
+AE.ServiceTaskId, 
+CT.Date, 
+CT.TaskType, 
+CT.Quantity, 
+CT.TotalWorkingHours, 
+ROUND(CT.TotalWorkingHours / CT.Quantity, 2) as TimeOnEachTask 
+from ( 
+MwwMsSAPData.MwwMsAssignedEmployees as AE 
+join MwwMsSAPData.MwwMsCompletedTasks as CT 
+on CT.ServiceTaskId = AE.ServiceTaskId 
+); 

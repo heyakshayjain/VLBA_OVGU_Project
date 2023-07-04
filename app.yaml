@@ -1,0 +1,5 @@
+runtime: python38
+entrypoint: gunicorn -b :$PORT main:app
+
+env_variables:
+  GOOGLE_APPLICATION_CREDENTIALS: /Users/saikatmitra/OvGU Lectures/SEM III/VLBA System Architecture/VLBA_Project/proj-iv-maintenance-service-be58bdb07222.json

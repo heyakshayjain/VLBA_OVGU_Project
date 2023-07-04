@@ -1,0 +1,119 @@
+
+------------------------Finalmodeltrainingquery---------------
+
+-- Split the dataset into a training set and a test set
+CREATE OR REPLACE TABLE MwwMsSAPData.Inputdata_train1 AS
+SELECT TaskType,
+UniqueTeams,
+AverageTimeToCompleteTheTaskinHours
+FROM MwwMsSAPData.Inputdata
+WHERE MOD(ABS(FARM_FINGERPRINT(TeamId)), 10) < 8; -- 80% for training
+
+CREATE OR REPLACE TABLE MwwMsSAPData.Inputdata_test1 AS
+SELECT 
+TaskType,
+UniqueTeams,
+AverageTimeToCompleteTheTaskinHours
+FROM MwwMsSAPData.Inputdata
+WHERE MOD(ABS(FARM_FINGERPRINT(TeamId)), 10) >= 8; -- 20% for testing
+
+-- Train the regression model
+CREATE OR REPLACE MODEL MwwMsSAPData.TimePredictionModelwithoutteamid
+OPTIONS(model_type='linear_reg') AS
+SELECT
+  TaskType,
+  UniqueTeams,
+  AverageTimeToCompleteTheTaskinHours AS label
+FROM MwwMsSAPData.Inputdata_train2;
+
+
+
+
+------------------------Finalmodeltrainingquery---------------
+Split the dataset into a training set and a test set
+CREATE OR REPLACE TABLE MwwMsSAPData.Inputdata_train2 AS
+SELECT TaskType,
+UniqueTeams,
+AverageTimeToCompleteTheTaskinHours
+FROM MwwMsSAPData.Inputdata
+WHERE MOD(ABS(FARM_FINGERPRINT(TeamId)), 10) < 8; -- 80% for training
+
+CREATE OR REPLACE TABLE MwwMsSAPData.Inputdata_test2 AS
+SELECT 
+TaskType,
+UniqueTeams,
+AverageTimeToCompleteTheTaskinHours
+FROM MwwMsSAPData.Inputdata
+WHERE MOD(ABS(FARM_FINGERPRINT(TeamId)), 10) >= 8; -- 20% for testing
+
+-- Train the regression model
+CREATE OR REPLACE MODEL MwwMsSAPData.TimePredictionModelwithoutteamid
+OPTIONS(model_type='linear_reg') AS
+SELECT
+  TaskType,
+  UniqueTeams,
+  AverageTimeToCompleteTheTaskinHours AS label
+FROM MwwMsSAPData.Inputdata_train2;
+
+
+
+-----------------------------BikePrediction-------------------------------
+
+SELECT
+  'Bike repair' AS TaskType,
+  i.UniqueTeams,
+  p.predicted_label AS TimeTakeninHours
+FROM (
+  SELECT DISTINCT UniqueTeams
+  FROM MwwMsSAPData.Inputdata_train2
+) AS i
+LEFT JOIN ML.PREDICT(MODEL `MwwMsSAPData.TimePredictionModelwithoutteamid`, (
+  SELECT
+    'Bike repair' AS TaskType,
+    UniqueTeams
+  FROM (
+    SELECT DISTINCT UniqueTeams
+    FROM MwwMsSAPData.Inputdata_train2
+  )
+)) AS p
+ON i.UniqueTeams = p.UniqueTeams
+ORDER BY p.predicted_label ASC;
+---------------------
+SELECT
+  'Bike repair' AS TaskType,
+  i.UniqueTeams,
+  p.predicted_label AS TimeTakeninHours
+FROM (
+  SELECT DISTINCT UniqueTeams
+  FROM MwwMsSAPData.Inputdata_train2
+) AS i
+LEFT JOIN ML.PREDICT(MODEL `MwwMsSAPData.TimePredictionModelwithoutteamid`, (
+  SELECT
+    'Bike repair' AS TaskType,
+    UniqueTeams
+  FROM (
+    SELECT DISTINCT UniqueTeams
+    FROM MwwMsSAPData.Inputdata_train2
+  )
+)) AS p
+ON i.UniqueTeams = p.UniqueTeams
+ORDER BY p.predicted_label ASC;
+---------------------SELECT
+  'Bike repair' AS TaskType,
+  i.UniqueTeams,
+  p.predicted_label AS TimeTakeninHours
+FROM (
+  SELECT DISTINCT UniqueTeams
+  FROM MwwMsSAPData.Inputdata_train2
+) AS i
+LEFT JOIN ML.PREDICT(MODEL `MwwMsSAPData.TimePredictionModelwithoutteamid`, (
+  SELECT
+    'Bike repair' AS TaskType,
+    UniqueTeams
+  FROM (
+    SELECT DISTINCT UniqueTeams
+    FROM MwwMsSAPData.Inputdata_train2
+  )
+)) AS p
+ON i.UniqueTeams = p.UniqueTeams
+ORDER BY p.predicted_label ASC;
